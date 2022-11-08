@@ -12,9 +12,6 @@ jobs:
   build:
     runs-on: windows-latest
 
-    env:
-      ZIP_FILE_NAME: ${GITHUB_REF/refs\/tags\//}.zip
-
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -29,18 +26,17 @@ jobs:
     - name: dotnet publish
       run: dotnet publish -c Release -r win-x64 --self-contained false -p:PublishSingleFile=true -o ${{github.workspace}}\.publish
 
-    #- name: Get the version
-    #  id: get_zip_file_name
-    #  run: echo "VERSION=${GITHUB_REF/refs\/tags\//}.zip" >> $GITHUB_OUTPUT
-    #  shell: bash
+    - name: Get the version
+      id: get_zip_file_name
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\//}.zip" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: Archive Release
       uses: thedoctor0/zip-release@main
       with:
         directory: ${{github.workspace}}\.publish
         type: 'zip'
-        #filename: '${{steps.get_zip_file_name.outputs.VERSION}}'
-        filename: '${{env.ZIP_FILE_NAME}}'
+        filename: '${{steps.get_zip_file_name.outputs.VERSION}}'
         exclusions: '*.pdb'
 
     - name: List files in publish folder
@@ -68,8 +64,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-        #asset_path: ${{github.workspace}}\.publish\${{steps.get_zip_file_name.outputs.VERSION}}
-        #asset_name: ${{steps.get_zip_file_name.outputs.VERSION}}
-        asset_path: ${{github.workspace}}\.publish\${{env.ZIP_FILE_NAME}}
-        asset_name: ${{env.ZIP_FILE_NAME}}
+        asset_path: ${{github.workspace}}\.publish\${{steps.get_zip_file_name.outputs.VERSION}}
+        asset_name: ${{steps.get_zip_file_name.outputs.VERSION}}
         asset_content_type: application/zip
