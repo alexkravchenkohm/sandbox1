@@ -28,7 +28,7 @@ jobs:
 
     - name: Get the version
       id: get_zip_file_name
-      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}.zip
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\//}.zip" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Archive Release
