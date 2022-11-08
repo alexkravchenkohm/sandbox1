@@ -28,7 +28,7 @@ jobs:
 
     - name: Build ZIP file name from tag
       id: get_zip_file_name
-      run: echo "FILENAME=SandboxApp${GITHUB_REF/refs\/tags\//}.zip" >> $GITHUB_OUTPUT
+      run: echo "FILENAME=SandboxApp-${GITHUB_REF/refs\/tags\//}.zip" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Archive Release
