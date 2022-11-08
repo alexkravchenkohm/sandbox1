@@ -13,4 +13,10 @@
     <Content Include="Icon2.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\LICENSE" Link="LICENSE">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
